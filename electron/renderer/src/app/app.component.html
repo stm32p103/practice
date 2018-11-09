@@ -1,0 +1,7 @@
+<video style="width: 640px; height:480px;">Video stream not available.</video>
+<h1 (click)="update()">スクリーンキャプチャ</h1>
+<ul>
+  <li *ngFor="let src of sources; let i = index" (click)="select( src.id )">
+    {{src.name}}
+  </li>
+</ul>

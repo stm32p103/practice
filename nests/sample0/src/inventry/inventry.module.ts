@@ -9,9 +9,15 @@ function ToArray( obj: Object ) {
     return Object.keys( obj ).map( key => obj[key] );
 }
 
+const EntityArray = ToArray( Entities );
+
 @Module( {
-    imports: [ TypeOrmModule.forFeature( ToArray( Entities ) ) ],
+    imports: [ TypeOrmModule.forFeature( EntityArray ) ],
     providers: ToArray( Services ),
     controllers: ToArray( Controllers ),
 } )
-export class ItemModule {}
+export class InventryModule {
+    static readonly Entities = EntityArray;
+}
+
+export { Services, Entities, Controllers };

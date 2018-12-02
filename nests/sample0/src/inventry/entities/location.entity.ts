@@ -1,4 +1,4 @@
-import { LabeledObject } from './labeled-object.entity';
+import { LabeledHeader } from './header';
 import { 
     Entity,
     Column,
@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Location extends LabeledObject {
+export class Location extends LabeledHeader {
     constructor( init?: Partial<Location> ) {
         super();
         Object.assign(this, init);

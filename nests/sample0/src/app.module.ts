@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { InventryModule } from './inventry/inventry.module';
-
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({

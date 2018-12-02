@@ -1,24 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, BaseEntity } from 'typeorm';
 
-import { Item } from '../entities/item.entity';
+import { Item } from '../entities';
 
 @Injectable()
 export class ItemService {
-    constructor( @InjectRepository( Item ) private readonly itemRepos: Repository<Item> ) {
-    }
+    constructor( @InjectRepository( Item ) private readonly itemRepos: Repository<Item> ) {}
 
-    async add( item: Item ): Promise<Item> {
+    async create( item: Item ): Promise<Item> {
         let newItem = this.itemRepos.create( item );
-        return await this.itemRepos.save(newItem);
+        return await this.itemRepos.save( newItem );
     }
-  
+    
     async findAll(): Promise<Item[]> {
         return await this.itemRepos.find();
     }
 
-    async update( item: Item ): Promise<Item> {
-        return await this.itemRepos.save(item);
+    async findById( id: number ): Promise<Item> {
+        return await this.itemRepos.findByIds( [ id ] )[0];
     }
 }

@@ -14,24 +14,9 @@ export class ItemController {
 
     @Get()
     async findAll():  Promise<Item[]> {
-        let a = await this.itemRepos.add( new Item( { name: 'abc', description: 'abcd', label: 'x' } ) );
+        let a = await this.itemRepos.create( { name: 'abc', label: 'x' } );
         let items = await this.itemRepos.findAll();
         console.log( items );
         return items;
-    }
-    
-    @Get('loc')
-    async locatedAt() {
-        let items = await this.findAll();
-        let item = items[3];
-        if( item ) {
-            item.locationId = 1; 
-        }
-        return await this.itemRepos.update(item);
-    }
-    
-    @Post()
-    add(@Body('name') name: string, @Body('description') description: string):  Promise<Item> {
-        return this.itemRepos.add( new Item( { name: 'abc', description: 'abcd', label: 'x' } ) );
     }
 }

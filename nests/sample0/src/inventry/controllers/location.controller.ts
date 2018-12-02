@@ -14,12 +14,12 @@ export class LocationController {
 
     @Get()
     async findAll():  Promise<Location[]> {
-        let a = await this.itemRepos.add( {id: undefined, name: 'abc', description: 'abcd', label: 'x' } );
+        let a = await this.itemRepos.add( {id: undefined, name: 'abc', label: 'x' } );
         return await this.itemRepos.findAll();
     }
     
     @Post()
-    add(@Body('name') name: string, @Body('description') description: string):  Promise<Location> {
-        return this.itemRepos.add( {id: undefined, name: name, description: description, label: 'x' } );
+    add(@Body('name') name: string ):  Promise<Location> {
+        return this.itemRepos.add( {id: undefined, name: name, label: 'x' } );
     }
 }

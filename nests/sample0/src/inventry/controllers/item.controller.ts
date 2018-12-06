@@ -5,7 +5,7 @@ import { Get, Post, Body, Controller } from '@nestjs/common';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Item } from '../entities';
+import { Item, ItemDetail } from '../entities';
 import { ItemService } from '../services';
 
 @Controller('item')
@@ -14,9 +14,20 @@ export class ItemController {
 
     @Get()
     async findAll():  Promise<Item[]> {
-        let a = await this.itemRepos.create( { name: 'abc', label: 'x' } );
+        let a = await this.itemRepos.create( new Item( { name: 'abc', label: 'x', detail: new ItemDetail( { description: 'hi'} ) } ) );
         let items = await this.itemRepos.findAll();
-        console.log( items );
         return items;
+    }
+    @Get('aaa')
+    async test(): Promise<Item> {
+        let items = await this.itemRepos.findAll();
+        console.log( items[0] )
+        items[0].locationId = 2;
+        return await this.itemRepos.update( items[0] );
+    }
+    
+    @Get('detail')
+    async detail(): Promise<ItemDetail[]>{
+        return await this.itemRepos.detail();
     }
 }

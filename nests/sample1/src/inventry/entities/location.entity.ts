@@ -5,8 +5,8 @@ import {
 import { EntityCommon } from './common.entity';
 
 @Entity()
-export class Item extends EntityCommon {
-    constructor( init?: Partial<Item> ) {
+export class Location extends EntityCommon {
+    constructor( init?: Partial<Location> ) {
         super( init );
     }
 }

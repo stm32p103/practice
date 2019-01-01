@@ -1,47 +1,49 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DeleteResult } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 
+import { EntityCommonService } from './entity-common.service';
 import { ItemDto } from '../dto';
 import { Item } from '../entities';
 
 @Injectable()
-export class ItemService {
+export class ItemService implements EntityCommonService<Item,ItemDto> {
     constructor( 
-        @InjectRepository( Item ) private readonly items: Repository<Item>
-    ) {}
+        @InjectRepository( Item ) private readonly repo: Repository<Item>
+    ) {
+    }
 
-    async create( dto: ItemDto ): Promise<Item> {
-        let newItem = new Item( { ...dto } );
-        return await this.items.save( newItem );
+    async add( dto: ItemDto ): Promise<Item> {
+        let newItem = this.repo.create( dto );
+        return await this.repo.save( newItem );
     }
 
     async update( id: number, dto: ItemDto ): Promise<Item> {
-        await this.items.update( id, new Item(  { ...dto } ) );
-        return await this.items.findOne( id );
+        await this.repo.update( id, new Item(  { ...dto } ) );
+        return await this.repo.findOne( id );
     }
 
     async findOneByCode( code: string ): Promise<Item> {
-        return await this.items.findOne( { code: code } );
+        return await this.repo.findOne( { code: code } );
     }
     
     async findOneById( id: number ): Promise<Item> {
-        return await this.items.findOne( id );
+        return await this.repo.findOne( id );
     }
     
     async findAll(): Promise<Item[]> {
-        return await this.items.find( {} );
+        return await this.repo.find( {} );
     }
 
-    async findByCode( codes: string[] ): Promise<Item[]> {
-        return await this.items.find();
+    async findByCodes( codes: string[] ): Promise<Item[]> {
+        return await this.repo.find();
     }
 
     async findByIds( ids: number[] ): Promise<Item[]> {
-        return await this.items.findByIds( ids );
+        return await this.repo.findByIds( ids );
     }
 
     async delete( ids: number[] ): Promise<void> {
-        await this.items.delete( ids );
+        await this.repo.delete( ids );
     }
 }

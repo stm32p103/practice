@@ -5,26 +5,26 @@ import { Get, Post, Patch, Delete, Body, Controller, Param, HttpException, HttpS
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { ItemDto } from '../dto';
-import { Item } from '../entities';
-import { ItemService } from '../services';
+import { LocationDto } from '../dto';
+import { Location } from '../entities';
+import { LocationService } from '../services';
 
-@Controller('items')
-export class ItemController {
-    constructor(private readonly items: ItemService ) {}
+@Controller('location')
+export class LocationController {
+    constructor(private readonly items: LocationService ) {}
 
     @Get()
-    async findAll():  Promise<Item[]> {
+    async findAll():  Promise<Location[]> {
         return await this.items.findAll();
     }
 
     @Post()
-    async create( @Body() dto: ItemDto ): Promise<Item> {
+    async create( @Body() dto: LocationDto ): Promise<Location> {
         return this.items.add( dto );
     }
 
     @Get(':id')
-    async getById( @Param('id') id: number ):  Promise<Item> {
+    async getById( @Param('id') id: number ):  Promise<Location> {
         let found = await this.items.findOneById( id );
         if( found ) {
             return found;
@@ -33,7 +33,7 @@ export class ItemController {
     }
     
     @Patch(':id')
-    async update( @Param('id') idString: string, @Body() dto: ItemDto ): Promise<Item> {
+    async update( @Param('id') idString: string, @Body() dto: LocationDto ): Promise<Location> {
         let result = await this.items.update( Number( idString ), dto );
         if( result ) {
             return result;

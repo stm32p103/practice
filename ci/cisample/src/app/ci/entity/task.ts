@@ -3,38 +3,36 @@ import { BaselineKey } from './baseline';
 export class TaskKey {
   constructor( readonly key: string ) {}  
 }
-
-export enum TaskStateEnum {
-  Todo,
-  OnGoing,
-  Done
-}
+//
+//export enum TaskStateEnum {
+//  Todo,
+//  OnGoing,
+//  Done
+//}
 
 export class Task {
-  private _state: TaskStateEnum = TaskStateEnum.Todo;
+//  private _state: TaskStateEnum = TaskStateEnum.Todo;
   constructor( 
     public readonly key: TaskKey,
     public contained: BaselineKey ) {
-    
   }
 
-  public get state() { return this._state }
-    
-  rescheduleTo( baseline: BaselineKey ) {
-    this.contained = baseline;
-  }
-  
-  reset() {
-    this._state = TaskStateEnum.Todo;
-  }
-  
-  start() {
-    this._state = TaskStateEnum.OnGoing;
-  }
-  
-  complete() {
-    this._state = TaskStateEnum.Done;
-  }
+//  public get state() { return this._state }
+//  rescheduleTo( baseline: BaselineKey ) {
+//    this.contained = baseline;
+//  }
+//  
+//  reset() {
+//    this._state = TaskStateEnum.Todo;
+//  }
+//  
+//  start() {
+//    this._state = TaskStateEnum.OnGoing;
+//  }
+//  
+//  complete() {
+//    this._state = TaskStateEnum.Done;
+//  }
 }
 
 // あくまで構成管理のコンテキストでのタスクを表すので、タスク自体の細かい管理は外部にゆだねる

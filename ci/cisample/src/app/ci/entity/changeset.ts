@@ -29,5 +29,5 @@ export interface ChangesetRepo {
   remove( cs: Changeset ): Promise<void>;
   findByKey( key: ChangesetKey ): Promise<Changeset>;
   findByTask( task: TaskKey ): Promise<Changeset[]>;
-  findByConfigurationItem( item: ItemKey ): Promise<Changeset[]>;
+  findByItem( item: ItemKey ): Promise<Changeset[]>;
 }

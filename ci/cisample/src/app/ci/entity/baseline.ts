@@ -1,4 +1,4 @@
-
+import { ReleaseKey } from './release';
 export class BaselineTypeKey {
   constructor( public readonly key: string ) {}
 }
@@ -17,8 +17,8 @@ export class BaselineKey {
  * 例えば baseline.createSub( 'name' ) のようにする。
  * ------------------------------------------------------------------------- */
 export class Baseline {
-  key: BaselineKey;
   type: BaselineTypeKey;
+  constructor( public readonly key: BaselineKey, public readonly release: ReleaseKey ) {}
 }
 
 /* ----------------------------------------------------------------------------
@@ -28,5 +28,6 @@ export interface BaselineRepository {
   save( baseline: Baseline ): Promise<void>;
   saveAll( baselines: Baseline[] ): Promise<void>;
   remove( baseline: Baseline ): Promise<void>;
-  findByKey( baseline: Baseline ): Promise<Baseline>;
+  findByKey( baseline: BaselineKey ): Promise<Baseline>;
+  findByRelease( release: ReleaseKey ): Promise<Baseline>;
 }

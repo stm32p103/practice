@@ -1,1 +1,1 @@
-import {  } from '../entity';
+export * from './jira-release';

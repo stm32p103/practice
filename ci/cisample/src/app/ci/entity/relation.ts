@@ -37,4 +37,3 @@ export interface RelationRepository {
   findByRelatedItem( item: ItemKey ): Promise<Relation>;
   findByRelateddTask( task: TaskKey ): Promise<Relation>;
 }
-

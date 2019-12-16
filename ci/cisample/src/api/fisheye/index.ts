@@ -117,6 +117,36 @@ export class FisheyeAPI {
     console.log( res );
     return res;
   }
+  
+  async getChangeset( repo: string, csid: string ): Promise<any> {
+    const req = Request.get( `${this.base}/rest-service-fe/revisionData-v1/changeset/${repo}/${csid}` );
+
+    let res: any;
+    
+    try {
+      res = await this.api.request( req );
+    } catch( err ) {
+      console.log( err );
+    }
+    
+    console.log( res );
+    return res;
+  }
+  
+  async getPathHistory( repo: string, path: string ='/' ): Promise<any> {
+    const req = Request.get( `${this.base}/rest-service-fe/revisionData-v1/pathHistory/${repo}?path=${path}` );
+
+    let res: any;
+    console.log( req )
+    try {
+      res = await this.api.request( req );
+    } catch( err ) {
+      console.log( err );
+    }
+    
+    console.log( res );
+    return res;
+  }
 //
 //
 //  async getPathList( repo: string, param: GetPathListParam ) {

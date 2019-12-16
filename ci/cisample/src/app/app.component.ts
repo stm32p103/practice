@@ -34,4 +34,16 @@ export class AppComponent {
       this.res = JSON.stringify( res, null, 4 );
     } );
   }
+  
+  getChangeset( repo: string, csid: string ) {
+    this.fisheye.getChangeset( repo, csid ).then( res => {
+      this.res = JSON.stringify( res, null, 4 );
+    } );
+  }
+  
+  getPathHistory( repo: string, path: string ) {
+    this.fisheye.getPathHistory( repo, path ).then( res => {
+      this.res = JSON.stringify( res, null, 4 );
+    } );
+  }
 }

@@ -73,7 +73,7 @@ export class FisheyeAPI {
   constructor( private readonly api: RestAPI, private readonly base ) {}
   
   async getAllRepositories(): Promise<Repository[]> {
-    const req = Request.get( `${this.base}/rest-service-fe/repositories-v1`, { header: { 'Content-Type': 'application/json' } } );
+    const req = Request.get( `${this.base}/rest-service-fe/repositories-v1` );
 
     let res: any;
     
@@ -88,7 +88,7 @@ export class FisheyeAPI {
   }
   
   async getRepository( repo: string ): Promise<Repository> {
-    const req = Request.get( `${this.base}/rest-service-fe/repositories-v1/${repo}`, { header: { 'Content-Type': 'application/json' } }  );
+    const req = Request.get( `${this.base}/rest-service-fe/repositories-v1/${repo}` );
 
     let res: any;
     
@@ -104,7 +104,7 @@ export class FisheyeAPI {
 
   async getChangesetList( repo: string, param?: GetChangesetListParam ): Promise<ChangesetList> {
     const query = param ? param.toString() : '';
-    const req = Request.get( `${this.base}/rest-service-fe/revisionData-v1/changesetList/${repo}${query}`, { header: { 'Accept': 'application/json' } }  );
+    const req = Request.get( `${this.base}/rest-service-fe/revisionData-v1/changesetList/${repo}${query}` );
 
     let res: ChangesetList;
     

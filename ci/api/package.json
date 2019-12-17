@@ -1,0 +1,15 @@
+{
+  "name": "@local/api",
+  "version": "0.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "author": "",
+  "license": "",
+  "private": true,
+  "dependencies": {
+    "tslib": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/typescript": "^2.0.0"
+  }
+}

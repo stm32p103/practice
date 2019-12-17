@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AngularRestAPI } from '../api/common/angular';
-import { FisheyeAPI, GetChangesetListParam } from '../api'; 
+import { FisheyeAPI, GetChangesetListParam } from '@local/api'; 
+import { AngularRestAPI } from './api';
 
 @Component({
   selector: 'app-root',

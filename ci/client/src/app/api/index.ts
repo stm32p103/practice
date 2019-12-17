@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { RestAPI, Request, RequestOption } from '../request';
+import { RestAPI, Request, RequestOption } from '@local/api';
 /* ############################################################################
 
 ############################################################################ */

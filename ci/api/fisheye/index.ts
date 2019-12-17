@@ -24,9 +24,40 @@ export interface ChangesetList {
   csid: string[];
 }
 
-export interface GetPathListParam {
-  path?: string;
+//-----------------------------------------------------------------------------
+export interface Changeset {
+  author: string;
+  branch: string;
+  branches: string[];
+  children: string[];
+  comment: string;
+  csid: string;
+  date: Date;
+  displayId: string;
+  fileRevisionKey: { path: string, csid: string }[];
+  parent: string[];
+  repositoryName: string;
 }
+
+//-----------------------------------------------------------------------------
+export interface PathHistoryList {
+  fileRevision: PathHistory[];
+}
+
+export interface PathHistory {
+  ancestry: string[];
+  author: string;
+  comment: string;
+  contentLink: string;
+  date: Date;
+  fileRevisionState: string;
+  lineAdded: number;
+  lineRemoved: number;
+  path: string;
+  rev: string;
+  totalLines: number;
+}
+//-----------------------------------------------------------------------------
 
 
 export class GetChangesetListParam {
@@ -118,10 +149,10 @@ export class FisheyeAPI {
     return res;
   }
   
-  async getChangeset( repo: string, csid: string ): Promise<any> {
+  async getChangeset( repo: string, csid: string ): Promise<Changeset> {
     const req = Request.get( `${this.base}/rest-service-fe/revisionData-v1/changeset/${repo}/${csid}` );
 
-    let res: any;
+    let res: Changeset;
     
     try {
       res = await this.api.request( req );
@@ -133,18 +164,16 @@ export class FisheyeAPI {
     return res;
   }
   
-  async getPathHistory( repo: string, path: string ='/' ): Promise<any> {
+  async getPathHistory( repo: string, path: string ='/' ): Promise<PathHistoryList> {
     const req = Request.get( `${this.base}/rest-service-fe/revisionData-v1/pathHistory/${repo}?path=${path}` );
 
-    let res: any;
-    console.log( req )
+    let res: PathHistoryList;
     try {
-      res = await this.api.request( req );
+      res = await this.api.request( req ) as PathHistoryList;
     } catch( err ) {
       console.log( err );
     }
     
-    console.log( res );
     return res;
   }
 }

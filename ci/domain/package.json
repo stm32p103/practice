@@ -1,0 +1,16 @@
+{
+  "name": "@local/domain",
+  "version": "0.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "author": "",
+  "license": "",
+  "private": true,
+  "dependencies": {
+    "rxjs": "^6.5.3",
+    "tslib": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/typescript": "^2.0.0"
+  }
+}

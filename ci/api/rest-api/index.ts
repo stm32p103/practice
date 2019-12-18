@@ -1,8 +1,7 @@
-/* ------------------------------------------------------------------------
- * クエリパラメータを文字列にする
- * --------------------------------------------------------------------- */
+/* ############################################################################
+ * URL作成の補助
+ * ######################################################################### */
 export type QueryObject = { [key: string]: string };
-
 
 export function queryToString( query: QueryObject = {} ) {
   let tmp = '';
@@ -23,10 +22,14 @@ export function queryToString( query: QueryObject = {} ) {
   return tmp;
 }
 
+/* ############################################################################
+ * REST APIへのアクセス手段
+ * ######################################################################### */
 export type RequestOption = {
     data?: any;
     header?: { [name:string]: string | string[]  };
 }
+
 
 export interface RestAPI {
   get( url: string, option?: RequestOption ): Promise<any>;

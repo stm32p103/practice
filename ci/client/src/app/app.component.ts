@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { FisheyeAPI, GetChangesetListParam } from '@local/api'; 
-import { AngularRestAPI } from './api';
+import { FisheyeAPI, GetChangesetListParam, RestAPI } from '@local/api'; 
+import { RestAPIService } from './api';
 
 @Component({
   selector: 'app-root',
@@ -10,11 +10,10 @@ import { AngularRestAPI } from './api';
 })
 export class AppComponent {
   public res: string;
-  private api: AngularRestAPI;
+  private api: RestAPI;
   private fisheye: FisheyeAPI;
-  constructor( private http: HttpClient ) {
-    this.api =  new AngularRestAPI( this.http );
-    this.fisheye = new FisheyeAPI( this.api, 'http://localhost:10000/fisheye' );
+  constructor( api: RestAPIService ) {
+    this.fisheye = new FisheyeAPI( api, 'http://localhost:10000/fisheye' );
   }
   
   getRepository( repo: string ) {

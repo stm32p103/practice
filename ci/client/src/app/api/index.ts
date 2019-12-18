@@ -1,22 +1,26 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { RestAPI, Request, RequestOption } from '@local/api';
+import { RestAPI, RequestOption } from '@local/api';
 /* ############################################################################
 
 ############################################################################ */
-
-export class AngularRestAPI implements RestAPI {
+@Injectable()
+export class RestAPIService implements RestAPI {
   constructor( private http: HttpClient ) {}
   
-  async request( req: Request ): Promise<any> {
+  async get( url: string, option?: RequestOption ): Promise<any> {
     let res;
-    const header: { [name:string]: string | string[] } = req.header || {}; 
-    
-    switch( req.method ) {
-      case 'GET':
-        res = await this.http.get( req.url, { headers: header } ).toPromise();
-        break;
+    let header = {};
+    if( option && option.header ) {
+      header = option.header;
     }
+    
+    res = await this.http.get( url, { headers: header } ).toPromise();
     return res;
   }
+  
+  async post( url: string, option?: RequestOption ): Promise<any> {}
+  async delete( url: string, option?: RequestOption ): Promise<any> {}
+  async patch( url: string, option?: RequestOption ): Promise<any> {}
+  async put( url: string, option?: RequestOption ): Promise<any> {}
 }

@@ -7,7 +7,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 // ############################################################################
 import { PanelMenuModule } from 'primeng/panelmenu';
-import { ButtonModule } from 'primeng/button';
 // ############################################################################
 
 @NgModule({
@@ -20,7 +19,6 @@ import { ButtonModule } from 'primeng/button';
     AppRoutingModule,
     // ------------------------------------------------------------------------
     PanelMenuModule,
-    ButtonModule,
     // ------------------------------------------------------------------------
     ViewModule
   ],

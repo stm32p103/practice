@@ -1,1 +1,17 @@
-<p>sample-view works!</p>
+<div class="p-grid">
+<div class="p-col-12">
+<p-panel header="Config">
+  <div class="p-col-12" *ngFor="let rule of rules">
+  <p-checkbox [(ngModel)]="rule.selected" binary="true" [label]="rule.description"></p-checkbox>
+  </div>
+  </p-panel>
+</div>
+<div class="p-col-12">
+<p-panel header="Output">
+<p *ngFor="let rule of rules">{{rule.name}} {{rule.selected ? 1 : 0 }} {{rule.description}}</p>
+</p-panel>
+</div>
+
+<div class="p-col-12">
+<p-button [style]="{'float':'right'}" ngxClipboard [cbContent]="createText()" label="Copy to Clipboard"></p-button>
+</div>

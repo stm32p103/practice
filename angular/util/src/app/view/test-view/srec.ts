@@ -9,6 +9,13 @@ export interface Record extends Block {
   type: RecordType;
 }
 
+export interface SRecord {
+  blocks: Block[];
+  header?: string;
+  startAddress?: number;
+  recordCount?: number;
+}
+
 // constant
 enum AddressSizeEnum {
   Bit16 = 2,
@@ -191,15 +198,4 @@ export class SRecordWriter {
   toStartAddress16( address: number ) {
     return this.toSRecord( '9', address );
   }
-}
-
-enum SRecordAddressEnum {
-  Bit16, Bit24, Bit32
-}
-
-interface SRecordParam {
-  header?: string;
-  startAddress?: number;
-  addRecordCount: boolean;
-  recordType: SRecordAddressEnum;
 }

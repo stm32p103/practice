@@ -1,6 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SRecordReader, SRecordWriter, Block } from './srec';
-import { str2srec } from './srec-observable';
+import { str2srec } from './srec';
 import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -16,21 +15,6 @@ S3090800104CE9000008A1
 S30908001050C1000008C5
 S3110800105400127A000400000001000000F1
 S7050800033DB2`.split('\n'));
-
-
-const array = new ArrayBuffer( 10 );
-
-const bin1 = new Uint8Array( array, 0, 5);
-const bin2 = new Uint8Array( array, 5, 5);
-    bin1[0] = 0;
-    bin1[1] = 0xFF;
-    bin1[2] = 0xAA;
-    bin1[3] = 0x55;
-    bin2[0] = 0;
-    bin2[1] = 0x1;
-    bin2[2] = 0x2;
-    bin2[3] = 0x33;
-
 
 import { Pipe, PipeTransform } from '@angular/core';
 
@@ -77,16 +61,7 @@ export class HexViewComponent {
   styleUrls: ['./test-view.component.scss']
 })
 export class TestViewComponent implements OnInit {
-  srec: Block[] = [];
-  constructor() {
-    const reader = new SRecordReader();
-    const writer = new SRecordWriter();
-    try {
-      
-      }catch( err ){
-        console.log(err)
-      }
-  }
+  constructor() {}
   ngOnInit() {
     input.pipe( str2srec(), map( srec => { 
       srec.simplify();

@@ -1,8 +1,8 @@
-import { Block, RecordType, Record } from './type';
+import { Block, RecordType, SingleRecord } from './type';
 import { Const } from './const';
 import { getAddressSize } from './address';
 
-export class Reader {
+export class SingleReader {
   // variable
   private index;
   private sum;
@@ -34,7 +34,7 @@ export class Reader {
     return ( this.record.length - this.index ) / Const.BYTE_LEN;
   }
   
-  fromRecord( record: string ): Record {
+  fromRecord( record: string ): SingleRecord {
     this.record = record;
     this.index = Const.BYTECOUNT_POS;
     this.sum = 0;

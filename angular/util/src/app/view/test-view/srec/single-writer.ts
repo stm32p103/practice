@@ -1,8 +1,8 @@
-import { Block, RecordType, Record } from './type';
+import { Block, RecordType } from './type';
 import { Const } from './const';
 import { getAddressSize } from './address';
 
-export class Writer {
+export class SingleWriter {
   private index;
   private sum;
   private buf: string[];

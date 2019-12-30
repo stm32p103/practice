@@ -1,14 +1,16 @@
 import { Observable } from 'rxjs';
-import { map, reduce } from 'rxjs/operators';
-import { Block, Record } from './type';
-import { SRecord } from './srec';
-import { Reader } from './reader';
+import { map, reduce,  } from 'rxjs/operators';
+import { Block, SingleRecord, SRecord } from './type';
+import { SRecordStorage } from './srecord-storage';
+import { SingleReader } from './single-reader';
 
 export const str2srec = () => ( src: Observable<string> ) => {
-  const reader = new Reader();
-  const srec = new SRecord();
-  return src.pipe( map( record => reader.fromRecord( record ) ), reduce( ( srec: SRecord, rec: Record ) => {
-    srec.append( rec );
-    return srec;
-  }, srec) );
+  const singleReader = new SingleReader();
+  return src.pipe( 
+    map( record => singleReader.fromRecord( record ) ),
+    reduce( ( storage: SRecordStorage, rec: SingleRecord ) => {
+      storage.store( rec );
+      return storage;
+    }, new SRecordStorage() ),
+    map( srec => srec.toSRecord() ) );
 };

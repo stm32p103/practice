@@ -5,7 +5,7 @@ export interface Block {
   buffer: Uint8Array;
 }
 
-export interface Record extends Block {
+export interface SingleRecord extends Block {
   type: RecordType;
 }
 
@@ -13,8 +13,9 @@ export interface OrderedBlock extends Block {
   order: number;
 }
 
-export interface Section {
-  blocks: OrderedBlock[];
-  size: number;
-  start: number;
+export interface SRecord {
+  header?: string;
+  startAddress?: number;
+  recordCount?: number;
+  blocks: Block[];
 }

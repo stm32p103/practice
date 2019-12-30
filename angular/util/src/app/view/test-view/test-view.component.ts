@@ -63,9 +63,6 @@ export class HexViewComponent {
 export class TestViewComponent implements OnInit {
   constructor() {}
   ngOnInit() {
-    input.pipe( str2srec(), map( srec => { 
-      srec.simplify();
-      return srec;
-    } ) ).subscribe( res => console.log( res ));
+    input.pipe( str2srec() ).subscribe( res => console.log( res ));
   }
 }

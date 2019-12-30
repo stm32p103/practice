@@ -9,18 +9,8 @@ export interface Record extends Block {
   type: RecordType;
 }
 
-export interface SRecord {
-  blocks: Block[];
-  header?: string;
-  startAddress?: number;
-  recordCount?: number;
-}
-
-// constant
-enum AddressSizeEnum {
-  Bit16 = 2,
-  Bit24 = 3,
-  Bit32 = 4
+export interface OrderedBlock extends Block {
+  order: number;
 }
 
 const FORMAT = /^S[0-3,5-9]([0-9,A-F]{2}){4,}$/;   // SRecordの形式(S0-3,5-9)の後HEXが4つ以上あること(最低でもバイトカウント+16bitアドレス+SUM)
@@ -36,17 +26,32 @@ const BYTE_LEN = 2;                                // Stringで1バイトを表�
 const BYTE_MASK = 0xFF;                            // Numberの下位1バイトを抽出するマスク
 const BYTE_SHIFT = 8;                              // Numberを1バイト分シフトするビット数
 
-// レコードタイプごとのアドレスサイズ
-const addressSizeMap: { [type: string]: AddressSizeEnum } = {
-  '0': AddressSizeEnum.Bit16,
-  '1': AddressSizeEnum.Bit16,
-  '2': AddressSizeEnum.Bit24,
-  '3': AddressSizeEnum.Bit32,
-  '5': AddressSizeEnum.Bit16,
-  '6': AddressSizeEnum.Bit24,
-  '7': AddressSizeEnum.Bit32,
-  '8': AddressSizeEnum.Bit24,
-  '9': AddressSizeEnum.Bit16
+const ADDRESS_LEN_16 = 2;
+const ADDRESS_LEN_24 = 3;
+const ADDRESS_LEN_32 = 4;
+
+const getAddressSize = ( type: RecordType ): number => {
+  let res;
+  switch( type ) {
+  case '0':
+  case '1': 
+  case '5':
+  case '9':
+    res = ADDRESS_LEN_16;
+    break;
+  case '2':
+  case '8':
+  case '6':
+    res = ADDRESS_LEN_24;
+    break;
+  case '3':
+  case '7':
+    res = ADDRESS_LEN_32;
+    break;
+  default:
+    throw new Error( 'Invalid record type.' );
+  }
+  return res;
 }
 
 export class SRecordReader {
@@ -92,7 +97,7 @@ export class SRecordReader {
     
     // check record type
     const recordType = record[ TYPE_POS ] as RecordType;
-    const addressSize = addressSizeMap[ recordType ];
+    const addressSize = getAddressSize( recordType );
     
     // check byte count
     const byteCount = this.read();
@@ -132,7 +137,7 @@ export class SRecordWriter {
     this.sum = 0;
     this.index = 0;
     
-    const addressSize = addressSizeMap[ type ];
+    const addressSize = getAddressSize( type );
     
     // add bytecount
     const dataLength = data ? data.length : 0;
@@ -197,5 +202,73 @@ export class SRecordWriter {
   }
   toStartAddress16( address: number ) {
     return this.toSRecord( '9', address );
+  }
+}
+
+interface Section {
+  blocks: OrderedBlock[];
+  size: number;
+  start: number;
+}
+
+export class SRecord {
+  private order = 0;
+  blocks: OrderedBlock[] = [];
+  header?: string;
+  startAddress?: number;
+  recordCount?: number;
+  
+  append( rec: Record ) {
+    switch( rec.type ) {
+    case '0':
+      this.header = String.fromCharCode.apply( null, rec.buffer );
+      break;
+    case '1':
+    case '2':
+    case '3':
+      this.blocks.push( { address: rec.address, buffer: rec.buffer, order: this.order });
+      this.order++;
+      break;
+    case '5':
+    case '6':
+      this.recordCount = rec.address;
+      break;
+    case '7':
+    case '8':
+    case '9':
+      this.startAddress = rec.address;
+      break;
+    default:
+      throw new Error( 'Invalid record type.' );
+    }
+  }
+  
+  simplify() {
+    const blocks = this.blocks.slice().sort( ( a, b ) => a.address - b.address );
+    let section: Section = { blocks: [ blocks[0] ], size: blocks[0].buffer.length, start: blocks[0].address };
+    const group: Section[] = [ section ];
+    
+    blocks.reduce( ( pre, cur ) => {
+      if( pre.address + pre.buffer.length >= cur.address - 1 ) {
+        section.blocks.push( cur );
+        section.size = section.size + cur.buffer.length;
+      } else {
+        section = { blocks: [ cur ], size: cur.buffer.length, start: cur.address };
+        group.push( section );
+      }
+      return cur;
+    } );
+    
+    const res = group.map( section => {
+      const buffer = new Uint8Array( new ArrayBuffer( section.size ) );
+      section.blocks.sort( ( a, b ) => a.order - b.order );
+      section.blocks.forEach( block => {
+        buffer.set( block.buffer, block.address - section.start );
+      } )
+      
+      return buffer;
+    } );
+    
+    console.log( res )
   }
 }

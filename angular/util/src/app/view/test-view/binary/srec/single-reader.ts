@@ -1,15 +1,18 @@
-import { Block } from '../type';
+import { Block } from '../block';
 import { RecordType, SingleRecord } from './type';
 import { Const } from './const';
 import { getAddressSize } from './address';
 
+/* ############################################################################
+ * SRecord 1行を読み込み1つのブロック(SingleRecord)に変換する
+ * ######################################################################### */
 export class SingleReader {
   // variable
   private index;
   private sum;
   private record;
 
-  private read( count: number = 1 ): number {
+  private readBytes( count: number = 1 ): number {
     let tmp = 0;
     let value = 0;
     let sum = this.sum;
@@ -35,7 +38,7 @@ export class SingleReader {
     return ( this.record.length - this.index ) / Const.BYTE_LEN;
   }
   
-  fromRecord( record: string ): SingleRecord {
+  read( record: string ): SingleRecord {
     this.record = record;
     this.index = Const.BYTECOUNT_POS;
     this.sum = 0;
@@ -49,13 +52,13 @@ export class SingleReader {
     const addressSize = getAddressSize( recordType );
     
     // check byte count
-    const byteCount = this.read();
+    const byteCount = this.readBytes();
     if( byteCount !== this.remain() ) {
       throw new Error( 'Bytecount mismatch.' );
     }
     
     // calc address
-    const address = this.read( addressSize );
+    const address = this.readBytes( addressSize );
     
     // allocate buffer
     const size = this.remain() - Const.CHECKSUM_SIZE;
@@ -63,11 +66,11 @@ export class SingleReader {
       
     // store value
     for( let i=0; i<size; i++ ) {
-      buffer[i] = this.read();
+      buffer[i] = this.readBytes();
     }
     
     // compare checksum
-    const checksum = this.read();
+    const checksum = this.readBytes();
     if( ( this.sum & Const.BYTE_MASK ) !== Const.CHECKSUM_VALUE ) {
       throw new Error( 'Checksum error.' );
     }

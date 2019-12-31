@@ -1,24 +1,20 @@
 import { SRecord, SingleRecord } from './type';
-import { BlockMerger } from '../block-merger';
+import { BlockMerger } from '../block';
+import { SingleReader } from './single-reader';
 
 /* ############################################################################
- * SRecordを読み込み中の情報を保持するクラス
- * SingleRecordを読み込む過程で、ヘッダや開始アドレス、レコード数等を更新する。
- * バッファについては、同じ領域を複数回書く可能性もあるので、
- * Storageクラスで最終的なメモリの状態を可能な限り連続したブロックで
- * 表現できるようにしている。
+ * SRecordを読み込み中の情報を保持し、最終的なSRecordオブジェクトを生成する
  * ######################################################################### */
 export class SRecordReader {
-  private merger: BlockMerger;
+  private merger: BlockMerger = new BlockMerger();
+  private reader = new SingleReader();
+  
   private header?: string;
   private startAddress?: number;
   private recordCount?: number;
   
-  constructor() {
-    this.merger = new BlockMerger();
-  }
-  
-  read( rec: SingleRecord ) {
+  read( str: string ) {
+    const rec = this.reader.read( str );
     switch( rec.type ) {
     case '0':
       this.header = String.fromCharCode.apply( null, rec.buffer );

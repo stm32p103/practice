@@ -1,13 +1,16 @@
-import { Block } from '../type';
+import { Block } from '../block';
 import { RecordType } from './type';
 import { Const } from './const';
 import { getAddressSize } from './address';
 
+/* ############################################################################
+ * S0-S9のレコードを1つ出力する
+ * ######################################################################### */
 export class SingleWriter {
   private index;
   private sum;
   private buf: string[];
-  private toSRecord( type: RecordType, address: number, data?: Uint8Array ) {
+  private writeRecord( type: RecordType, address: number, data?: Uint8Array ) {
     // init
     this.buf = [ 'S' + type ];
     this.sum = 0;
@@ -51,32 +54,32 @@ export class SingleWriter {
     this.buf.push( '00'.concat( num.toString( Const.RADIX ) ).slice( -Const.BYTE_LEN ) );
   }
   
-  toHeader( header: string ): string {
+  writeHeader( header: string ): string {
     const array = new TextEncoder().encode( header );
-    return this.toSRecord( '0', 0, array );
+    return this.writeRecord( '0', 0, array );
   }
-  toData16( block: Block ) {
-    return this.toSRecord( '1', block.address, block.buffer );
+  writeData16( block: Block ) {
+    return this.writeRecord( '1', block.address, block.buffer );
   }
-  toData24( block: Block ) {
-    return this.toSRecord( '2', block.address, block.buffer );
+  writeData24( block: Block ) {
+    return this.writeRecord( '2', block.address, block.buffer );
   }
-  toData32( block: Block ) {
-    return this.toSRecord( '3', block.address, block.buffer );
+  writeData32( block: Block ) {
+    return this.writeRecord( '3', block.address, block.buffer );
   }
-  toCount16( count: number ) {
-    return this.toSRecord( '5', count );
+  writeCount16( count: number ) {
+    return this.writeRecord( '5', count );
   }
-  toCount24( count: number ) {
-    return this.toSRecord( '6', count );
+  writeCount24( count: number ) {
+    return this.writeRecord( '6', count );
   }
-  toStartAddress32( address: number ) {
-    return this.toSRecord( '7', address );
+  writeStartAddress32( address: number ) {
+    return this.writeRecord( '7', address );
   }
-  toStartAddress24( address: number ) {
-    return this.toSRecord( '8', address );
+  writeStartAddress24( address: number ) {
+    return this.writeRecord( '8', address );
   }
-  toStartAddress16( address: number ) {
-    return this.toSRecord( '9', address );
+  writeStartAddress16( address: number ) {
+    return this.writeRecord( '9', address );
   }
 }

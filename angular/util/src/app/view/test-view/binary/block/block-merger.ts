@@ -15,6 +15,10 @@ export class BlockMerger {
   }
   
   merge(): Block[] {
+    if( this.blocks.length <= 0 ) {
+      return [];
+    }
+    
     const blocks = this.blocks.slice().sort( ( a, b ) => a.address - b.address );
     const sections = blocks.reduce( ( sections, block ) => {
       const isContinuous = sections[ sections.length - 1 ].appendIfContinuous( block );

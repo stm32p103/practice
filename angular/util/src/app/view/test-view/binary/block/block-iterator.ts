@@ -7,6 +7,10 @@ export class BlockIterator implements IterableIterator<Block> {
   private address: number;
   
   constructor( private readonly block: Block, private readonly maxLength: number ) {
+    if( this.maxLength <= 0 ) {
+      throw new Error( '"maxLength" must be > 0.' );
+    }
+    
     this.address = this.block.address;
   }
   
@@ -14,6 +18,7 @@ export class BlockIterator implements IterableIterator<Block> {
     const offset = this.address - this.block.address;
     const bufferLength = this.block.buffer.length;
     const length = Math.min( bufferLength - offset, this.maxLength );
+    
     const block = {
       address: this.address,
       buffer: new Uint8Array( this.block.buffer.buffer, offset, length )

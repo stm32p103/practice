@@ -54,7 +54,9 @@ export class SRecordWriter implements IterableIterator<string> {
       this.states.push( State.Header );
     }
     
-    this.states.push( State.Data );
+    if( this.srec.blocks.length > 0 ) {
+      this.states.push( State.Data );
+    }
     
     if( this.option.outputCount && this.srec.recordCount !== undefined  ) {
       this.states.push( State.Count );

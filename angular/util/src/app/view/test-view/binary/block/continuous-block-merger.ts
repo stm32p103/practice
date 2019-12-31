@@ -20,7 +20,7 @@ export class ContinuousBlockMerger {
   }
   
   appendIfContinuous( block: OrderedBlock ): boolean {
-    const last = this.blocks[ this.blocks.length - 1  ];
+    const last = this.blocks[ this.blocks.length - 1 ];
     const isContinuous = ( last.address + last.buffer.length >= block.address - 1 );
     if( isContinuous ) {
       this.blocks.push( block );

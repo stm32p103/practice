@@ -9,8 +9,8 @@ export class BlockArrayIterator implements IterableIterator<Block> {
   private index: number = 0;
   private iterator: BlockIterator;
   constructor( private blocks: Block[], private readonly maxLength: number ) {
-    if( this.blocks.length === 0 ) {
-      throw new Error( '"blocks" must have 1 or more Blocks.' )
+    if( this.maxLength <= 0 ) {
+      throw new Error( '"maxLength" must be > 0.' );
     }
     
     this.iterator = this.nextIterator();
@@ -25,8 +25,11 @@ export class BlockArrayIterator implements IterableIterator<Block> {
   }
   
   next(): IteratorResult<Block>  {
-    const res = this.iterator.next();
+    if( this.iterator === undefined ) {
+      return { done: true, value: undefined }
+    }
     
+    const res = this.iterator.next();
     if( res.done ) {
       // ブロックのイテレーションが完了したら次のブロックに移動する
       const itr = this.nextIterator();

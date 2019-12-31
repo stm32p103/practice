@@ -17,11 +17,8 @@ export class SingleReader {
     let value = 0;
     let sum = this.sum;
     let index = this.index;
+    
     for( let i=0; i<count; i++ ) {
-      if( index >= this.record.length ) {
-        throw new Error( 'Out of range.' );
-      }
-      
       tmp = parseInt( this.record.substr( index, Const.BYTE_LEN ), Const.RADIX );
       value = ( value << Const.BYTE_SHIFT ) + tmp;
       sum = sum + tmp;

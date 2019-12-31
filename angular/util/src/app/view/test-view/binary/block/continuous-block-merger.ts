@@ -1,5 +1,8 @@
-import { Block } from '../type';
-import { OrderedBlock } from './type';
+import { Block } from './type';
+
+export interface OrderedBlock extends Block {
+  order: number;
+}
 
 /* ############################################################################
  * 連続・オーバーラップした複数のブロックを一つのブロックにまとめるもの。

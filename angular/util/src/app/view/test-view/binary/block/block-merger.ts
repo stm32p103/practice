@@ -1,6 +1,5 @@
-import { Block } from '../type';
-import { OrderedBlock } from './type';
-import { ContinuousBlockMerger } from './continuous-block-merger';
+import { Block } from './type';
+import { ContinuousBlockMerger, OrderedBlock } from './continuous-block-merger';
 
 /* ############################################################################
  * メモリ空間を模擬し、複数のブロックを書きこんだ最終結果を、

@@ -1,4 +1,5 @@
-import { Block, RecordType } from './type';
+import { Block } from '../type';
+import { RecordType } from './type';
 import { Const } from './const';
 import { getAddressSize } from './address';
 

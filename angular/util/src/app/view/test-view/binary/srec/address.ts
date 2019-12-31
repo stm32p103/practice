@@ -4,6 +4,9 @@ const ADDRESS_LEN_16 = 2;
 const ADDRESS_LEN_24 = 3;
 const ADDRESS_LEN_32 = 4;
 
+/* ############################################################################
+ * S0-S9それぞれのアドレス長(バイト)を返す関数
+ * ######################################################################### */
 export const getAddressSize = ( type: RecordType ): number => {
   let res;
   switch( type ) {

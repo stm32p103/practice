@@ -12,7 +12,7 @@ export const str2srec = () => ( src: Observable<string> ) => {
   return src.pipe( 
     map( record => reader.fromRecord( record ) ),
     reduce( ( storage: SRecordReader, rec: SingleRecord ) => {
-      storage.write( rec );
+      storage.read( rec );
       return storage;
     }, new SRecordReader() ),
     map( srec => srec.toSRecord() ) );

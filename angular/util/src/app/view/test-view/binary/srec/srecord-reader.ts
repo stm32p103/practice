@@ -18,7 +18,7 @@ export class SRecordReader {
     this.merger = new BlockMerger();
   }
   
-  write( rec: SingleRecord ) {
+  read( rec: SingleRecord ) {
     switch( rec.type ) {
     case '0':
       this.header = String.fromCharCode.apply( null, rec.buffer );

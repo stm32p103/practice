@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { str2srec, srec2str } from './binary';
 import { from } from 'rxjs';
-import { map, flatMap } from 'rxjs/operators';
+import { map, flatMap, tap } from 'rxjs/operators';
 
 const input = from( `S00D000053616D706C652E6D6F7412
 S31508000000001800203D030008010300080B03000840
@@ -318,7 +318,8 @@ export class TestViewComponent implements OnInit {
   ngOnInit() {
     input.pipe(
       str2srec(),
-      srec2str(),
+      tap( s => console.log( s ) ),
+      srec2str( {outputCount: true, outputStartAddress: true, outputHeader: true, maxData: 32 } ),
     ).subscribe( rec => {
       console.log( rec );
     } );

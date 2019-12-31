@@ -6,6 +6,8 @@ export enum SRecordAddressLengthEnum {
   Bit16, Bit24, Bit32
 }
 
+const MAX_16BIT = Math.pow( 2, 16 ) - 1;
+
 export interface SRecordWriteOption {
   maxData?: number;
   addressLength?: SRecordAddressLengthEnum;
@@ -58,7 +60,7 @@ export class SRecordWriter implements IterableIterator<string> {
       this.states.push( State.Data );
     }
     
-    if( this.option.outputCount && this.srec.recordCount !== undefined  ) {
+    if( this.option.outputCount ) {
       this.states.push( State.Count );
     }
     
@@ -108,7 +110,7 @@ export class SRecordWriter implements IterableIterator<string> {
       const count = ( this.srec.recordCount !== undefined ) ? this.srec.recordCount : this.recordCount; 
       
       // レコード数に応じて選ぶ
-      if( count > 0xFFFF ) {
+      if( count > MAX_16BIT ) {
         res = this.writer.writeCount24( count );
       } else {
         res = this.writer.writeCount16( count );

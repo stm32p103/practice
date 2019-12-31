@@ -23,10 +23,10 @@ export class BlockMerger {
     const sections = blocks.reduce( ( sections, block ) => {
       const isContinuous = sections[ sections.length - 1 ].appendIfContinuous( block );
       if( !isContinuous ) {
-        sections.push( new ContinuousBlockMerger( block ) );
+        sections.push( new ContinuousBlockMerger() );
       }
       return sections;
-    }, [ new ContinuousBlockMerger( blocks[0] ) ] );
+    }, [ new ContinuousBlockMerger() ] );
     
     return sections.map( section => section.merge() );
   }

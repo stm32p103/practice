@@ -9,24 +9,24 @@ export interface OrderedBlock extends Block {
  * アドレス順に追加する必要がある
  * ######################################################################### */
 export class ContinuousBlockMerger {
+  private readonly blocks: OrderedBlock[] = [];
+  private size: number = 0;
   private startAddress: number;
-  private size: number;
-  readonly blocks: OrderedBlock[];
-  
-  constructor( init: OrderedBlock ) {
-    this.blocks = [ init ];
-    this.size = init.buffer.length;
-    this.startAddress = init.address;
-  }
   
   appendIfContinuous( block: OrderedBlock ): boolean {
-    const last = this.blocks[ this.blocks.length - 1 ];
-    const isContinuous = ( last.address + last.buffer.length >= block.address - 1 );
+    let isContinuous;
+    if( this.blocks.length > 0 ) {
+      const last = this.blocks[ this.blocks.length - 1 ];
+      isContinuous = ( last.address + last.buffer.length >= block.address - 1 );
+    } else {
+      isContinuous = true;
+      this.startAddress = block.address;
+    }
+    
     if( isContinuous ) {
       this.blocks.push( block );
       this.size += block.buffer.length;
     }
-    
     return isContinuous;
   }
   

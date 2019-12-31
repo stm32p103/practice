@@ -5,11 +5,11 @@ import { map, flatMap, tap } from 'rxjs/operators';
 
 const input = from( `S00D000053616D706C652E6D6F7412
 S31508000000001800203D030008010300080B03000840
-S3150800001000000000000000000000000000000000D2
+S30508000010E2
 S3150800002000000000000000000000000011030008A6
 S3150800003000000000000000001B030008250300085C
 S7050800033DB2`.split('\n'));
-
+// 異常…1レコード抜ける
 
 import { Pipe, PipeTransform } from '@angular/core';
 
@@ -61,7 +61,9 @@ export class TestViewComponent implements OnInit {
     input.pipe(
       str2srec(),
       tap( rec => {
-        this.binary = rec.blocks[0].buffer;
+        if( rec.blocks.length > 0 ) {
+          this.binary = rec.blocks[0].buffer;
+        }
         console.log( rec );
       } ),
       srec2str( { outputCount: true, outputStartAddress: true, outputHeader: true, maxData: 16 } ),

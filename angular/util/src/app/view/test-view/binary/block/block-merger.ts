@@ -15,19 +15,27 @@ export class BlockMerger {
   }
   
   merge(): Block[] {
-    if( this.blocks.length <= 0 ) {
-      return [];
+    const res: Block[] = [];
+    
+    if( this.blocks.length > 0 ) {
+      const blocks = this.blocks.slice().sort( ( a, b ) => a.address - b.address );
+      const sections = blocks.reduce( ( sections, block ) => {
+        const isContinuous = sections[ sections.length - 1 ].appendIfContinuous( block );
+        if( !isContinuous ) {
+          sections.push( new ContinuousBlockMerger() );
+        }
+        return sections;
+      }, [ new ContinuousBlockMerger() ] );
+      
+      sections.forEach( section => {
+        const tmp = section.merge();
+        if( tmp ) {
+          res.push( tmp );
+        }
+      } );
+      
+      console.log( blocks )
     }
-    
-    const blocks = this.blocks.slice().sort( ( a, b ) => a.address - b.address );
-    const sections = blocks.reduce( ( sections, block ) => {
-      const isContinuous = sections[ sections.length - 1 ].appendIfContinuous( block );
-      if( !isContinuous ) {
-        sections.push( new ContinuousBlockMerger() );
-      }
-      return sections;
-    }, [ new ContinuousBlockMerger() ] );
-    
-    return sections.map( section => section.merge() );
+    return res;
   }
 }

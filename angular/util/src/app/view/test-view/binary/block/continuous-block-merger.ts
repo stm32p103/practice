@@ -15,6 +15,7 @@ export class ContinuousBlockMerger {
   
   appendIfContinuous( block: OrderedBlock ): boolean {
     let isContinuous;
+    let size;
     if( this.blocks.length > 0 ) {
       const last = this.blocks[ this.blocks.length - 1 ];
       isContinuous = ( last.address + last.buffer.length >= block.address - 1 );
@@ -25,19 +26,21 @@ export class ContinuousBlockMerger {
     
     if( isContinuous ) {
       this.blocks.push( block );
-      this.size += block.buffer.length;
+      this.size = Math.max( this.size, block.buffer.length + block.address - this.startAddress );
     }
     return isContinuous;
   }
   
   merge(): Block {
-    const buffer = new Uint8Array( new ArrayBuffer ( this.size ) );
-    const blocks = this.blocks.slice().sort( ( a, b ) => a.order - b.order );
-    
-    blocks.forEach( block => {
-      buffer.set( block.buffer, block.address - this.startAddress );
-    } );
-    
-    return { address: this.startAddress, buffer: buffer };
+    if( this.blocks.length > 0 ) {
+      const buffer = new Uint8Array( new ArrayBuffer ( this.size ) );
+      const blocks = this.blocks.slice().sort( ( a, b ) => a.order - b.order );
+      
+      blocks.forEach( block => {
+        buffer.set( block.buffer, block.address - this.startAddress );
+      } );
+      
+      return { address: this.startAddress, buffer: buffer };
+    }
   }
 }

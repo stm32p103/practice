@@ -91,6 +91,7 @@ export class SRecordWriter implements IterableIterator<string> {
   next(): IteratorResult<string> {
     let res;
     const state = this.states[ this.stateIndex ];
+    
     switch( state ) {
     case State.Header:
       res = this.writer.writeHeader( this.srec.header );

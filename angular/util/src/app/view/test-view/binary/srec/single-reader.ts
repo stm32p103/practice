@@ -12,21 +12,10 @@ export class SingleReader {
   private sum;
   private record;
 
-  private readBytes( count: number = 1 ): number {
-    let tmp = 0;
-    let value = 0;
-    let sum = this.sum;
-    let index = this.index;
-    
-    for( let i=0; i<count; i++ ) {
-      tmp = parseInt( this.record.substr( index, Const.BYTE_LEN ), Const.RADIX );
-      value = ( value << Const.BYTE_SHIFT ) + tmp;
-      sum = sum + tmp;
-      index = index + Const.BYTE_LEN;
-    }
-    
-    this.index = index;
-    this.sum = sum;
+  private readByte(): number {
+    const value = parseInt( this.record.substr( this.index, Const.BYTE_LEN ), Const.RADIX );
+    this.index += Const.BYTE_LEN;
+    this.sum += value;
     
     return value; 
   }
@@ -49,13 +38,17 @@ export class SingleReader {
     const addressSize = getAddressSize( recordType );
     
     // check byte count
-    const byteCount = this.readBytes();
+    const byteCount = this.readByte();
     if( byteCount !== this.remain() ) {
       throw new Error( 'Bytecount mismatch.' );
     }
     
     // calc address
-    const address = this.readBytes( addressSize );
+    // ビットシフトは32ビット符号付整数として扱われるため、負の数になる可能性がある。
+    let address = 0;
+    for( let i=0; i<addressSize; i++ ) {
+      address = ( address * 256 ) + this.readByte();
+    }
     
     // allocate buffer
     const size = this.remain() - Const.CHECKSUM_SIZE;
@@ -63,11 +56,11 @@ export class SingleReader {
       
     // store value
     for( let i=0; i<size; i++ ) {
-      buffer[i] = this.readBytes();
+      buffer[i] = this.readByte();
     }
     
     // compare checksum
-    const checksum = this.readBytes();
+    const checksum = this.readByte();
     if( ( this.sum & Const.BYTE_MASK ) !== Const.CHECKSUM_VALUE ) {
       throw new Error( 'Checksum error.' );
     }

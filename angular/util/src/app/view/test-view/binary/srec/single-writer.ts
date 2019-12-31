@@ -4,6 +4,23 @@ import { Const } from './const';
 import { getAddressSize } from './address';
 
 /* ############################################################################
+ * イマイチな判定
+ * ######################################################################### */
+const MAX_16BIT = Math.pow( 2, 16 ) - 1;
+const MAX_24BIT = Math.pow( 2, 24 ) - 1;
+const MAX_32BIT = Math.pow( 2, 32 ) - 1;
+
+const checkAddressRange = ( min: number, max: number, val: number ) => {
+  if( val < min && val > max ) {
+    throw new Error( `Address(${val}) must be [ ${min}, ${max}].` );
+  }
+}
+
+const check16BitAddress = ( val: number ) => checkAddressRange( 0, MAX_16BIT, val );
+const check24BitAddress = ( val: number ) => checkAddressRange( 0, MAX_24BIT, val );
+const check32BitAddress = ( val: number ) => checkAddressRange( 0, MAX_32BIT, val );
+
+/* ############################################################################
  * S0-S9のレコードを1つ出力する
  * ######################################################################### */
 export class SingleWriter {
@@ -11,11 +28,6 @@ export class SingleWriter {
   private sum;
   private buf: string[];
   private writeRecord( type: RecordType, address: number, data?: Uint8Array ) {
-    // input guard
-    if( address < 0 ) {
-      throw new Error( `Address(${address}) must be >= 0.` );
-    }
-    
     // init
     this.sum = 0;
     this.index = 0;
@@ -73,36 +85,35 @@ export class SingleWriter {
     return this.writeRecord( '0', 0, array );
   }
   writeData16( block: Block ) {
-    if( block.address > 0xFFFF ) {
-      throw new Error( `Address(0x${block.address.toString(16)}) must be <= 0xFFFF.` );
-    }
+    check16BitAddress( block.address );
     return this.writeRecord( '1', block.address, block.buffer );
   }
   writeData24( block: Block ) {
-    if( block.address > 0xFFFFFF ) {
-      throw new Error( `Address(0x${block.address.toString(16)}) must be <= 0xFFFFFF.` );
-    }
+    check24BitAddress( block.address );
     return this.writeRecord( '2', block.address, block.buffer );
   }
   writeData32( block: Block ) {
-    if( block.address > 0xFFFFFFFF ) {
-      throw new Error( `Address(0x${block.address.toString(16)}) must be <= 0xFFFFFFFF.` );
-    }
+    check32BitAddress( block.address );
     return this.writeRecord( '3', block.address, block.buffer );
   }
   writeCount16( count: number ) {
+    check16BitAddress( count );
     return this.writeRecord( '5', count );
   }
   writeCount24( count: number ) {
+    check24BitAddress( count );
     return this.writeRecord( '6', count );
   }
   writeStartAddress32( address: number ) {
+    check32BitAddress( address );
     return this.writeRecord( '7', address );
   }
   writeStartAddress24( address: number ) {
+    check24BitAddress( address );
     return this.writeRecord( '8', address );
   }
   writeStartAddress16( address: number ) {
+    check16BitAddress( address );
     return this.writeRecord( '9', address );
   }
 }

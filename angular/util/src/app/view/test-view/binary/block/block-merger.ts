@@ -35,7 +35,6 @@ export class BlockMerger {
       return mergers;
     }, [ new ContinuousBlockMerger() ] );
     
-    // この時点で空のsectionは存在しないから、ガードは不要
-    return mergers.map( merger => merger.merge() );
+    return mergers.map( merger => merger.merge() ).filter( block => block !== undefined );
   }
 }

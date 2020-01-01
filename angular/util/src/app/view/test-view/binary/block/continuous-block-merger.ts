@@ -42,16 +42,22 @@ export class ContinuousBlockMerger {
   }
   
   merge(): Block {
-    if( this.blocks.length > 0 ) {
-      const size = this.endAddress - this.startAddress + 1;
-      const buffer = new Uint8Array( new ArrayBuffer ( size ) );
-      const blocks = this.blocks.slice().sort( ( a, b ) => a.order - b.order );
-      
-      blocks.forEach( block => {
-        buffer.set( block.buffer, block.address - this.startAddress );
-      } );
-      
-      return { address: this.startAddress, buffer: buffer };
+    if( this.blocks.length <= 0 ) {
+      return;
     }
+    
+    const size = this.endAddress - this.startAddress + 1;
+    if( size <= 0 ) {
+      return;
+    } 
+    
+    const buffer = new Uint8Array( new ArrayBuffer ( size ) );
+    const blocks = this.blocks.slice().sort( ( a, b ) => a.order - b.order );
+    
+    blocks.forEach( block => {
+      buffer.set( block.buffer, block.address - this.startAddress );
+    } );
+    
+    return { address: this.startAddress, buffer: buffer };
   }
 }

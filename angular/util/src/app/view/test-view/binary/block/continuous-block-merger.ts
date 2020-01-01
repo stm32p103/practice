@@ -10,30 +10,27 @@ export interface OrderedBlock extends Block {
  * ######################################################################### */
 export class ContinuousBlockMerger {
   private readonly blocks: OrderedBlock[] = [];
-  private size: number = 0;
-  private startAddress: number;
+  private startAddress: number;     // 先頭番地
+  private endAddress: number;       // 最終番地(要素数0なら、先頭番地-1になる)
   
   appendIfContinuous( block: OrderedBlock ): boolean {
-    let isContinuous;
-    let size;
-    if( this.blocks.length > 0 ) {
-      const last = this.blocks[ this.blocks.length - 1 ];
-      isContinuous = ( last.address + last.buffer.length >= block.address - 1 );
-    } else {
-      isContinuous = true;
+    if( this.blocks.length === 0 ) {
       this.startAddress = block.address;
+      this.endAddress = block.address + block.buffer.length - 1;
     }
     
+    const isContinuous = ( block.address <= this.endAddress + 1 );
     if( isContinuous ) {
       this.blocks.push( block );
-      this.size = Math.max( this.size, block.buffer.length + block.address - this.startAddress );
+      this.endAddress = Math.max( this.endAddress, block.address + block.buffer.length - 1 );
     }
     return isContinuous;
   }
   
   merge(): Block {
     if( this.blocks.length > 0 ) {
-      const buffer = new Uint8Array( new ArrayBuffer ( this.size ) );
+      const size = this.endAddress - this.startAddress + 1;
+      const buffer = new Uint8Array( new ArrayBuffer ( size ) );
       const blocks = this.blocks.slice().sort( ( a, b ) => a.order - b.order );
       
       blocks.forEach( block => {

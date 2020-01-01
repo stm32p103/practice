@@ -9,21 +9,35 @@ export interface OrderedBlock extends Block {
  * アドレス順に追加する必要がある
  * ######################################################################### */
 export class ContinuousBlockMerger {
-  private readonly blocks: OrderedBlock[] = [];
+  private blocks: OrderedBlock[] = [];
   private startAddress: number;     // 先頭番地
   private endAddress: number;       // 最終番地(要素数0なら、先頭番地-1になる)
   
+  constructor( block?: OrderedBlock ) {
+    if( block ) {
+      this.init( block );
+    }
+  }
+  
+  private init( block: OrderedBlock ) {
+    this.blocks = [ block ];
+    this.startAddress = block.address;
+    this.endAddress = block.address + block.buffer.length - 1;
+  }
+  
   appendIfContinuous( block: OrderedBlock ): boolean {
-    if( this.blocks.length === 0 ) {
-      this.startAddress = block.address;
-      this.endAddress = block.address + block.buffer.length - 1;
+    let isContinuous = true;
+    
+    if( this.blocks.length > 0 ) {
+      isContinuous = ( block.address <= ( this.endAddress + 1 ) );
+      if( isContinuous ) {
+        this.blocks.push( block );
+        this.endAddress = Math.max( this.endAddress, block.address + block.buffer.length - 1 );
+      }
+    } else {
+      this.init( block );
     }
     
-    const isContinuous = ( block.address <= this.endAddress + 1 );
-    if( isContinuous ) {
-      this.blocks.push( block );
-      this.endAddress = Math.max( this.endAddress, block.address + block.buffer.length - 1 );
-    }
     return isContinuous;
   }
   

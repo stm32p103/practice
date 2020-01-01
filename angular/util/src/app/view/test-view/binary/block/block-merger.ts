@@ -17,25 +17,25 @@ export class BlockMerger {
   merge(): Block[] {
     const res: Block[] = [];
     
-    if( this.blocks.length > 0 ) {
-      const blocks = this.blocks.slice().sort( ( a, b ) => a.address - b.address );
-      const sections = blocks.reduce( ( sections, block ) => {
-        const isContinuous = sections[ sections.length - 1 ].appendIfContinuous( block );
-        if( !isContinuous ) {
-          sections.push( new ContinuousBlockMerger() );
-        }
-        return sections;
-      }, [ new ContinuousBlockMerger() ] );
-      
-      sections.forEach( section => {
-        const tmp = section.merge();
-        if( tmp ) {
-          res.push( tmp );
-        }
-      } );
-      
-      console.log( blocks )
+    if( this.blocks.length == 0 ) {
+      return res;
     }
-    return res;
+    
+    // sort blocks by address
+    const blocks = this.blocks.slice().sort( ( a, b ) => a.address - b.address );
+    
+    const mergers = blocks.reduce( ( mergers, block ) => {
+      let merger = mergers[ mergers.length - 1 ];
+
+      const added = merger.appendIfContinuous( block );
+      if( !added ) {
+        merger = new ContinuousBlockMerger( block );
+        mergers.push( merger );
+      }
+      return mergers;
+    }, [ new ContinuousBlockMerger() ] );
+    
+    // この時点で空のsectionは存在しないから、ガードは不要
+    return mergers.map( merger => merger.merge() );
   }
 }

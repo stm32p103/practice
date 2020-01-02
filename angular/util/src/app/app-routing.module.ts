@@ -3,10 +3,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { SampleViewComponent } from './view/sample-view/sample-view.component'
 import { TestViewComponent } from './view/test-view/test-view.component'
+import { UploadViewComponent } from './view/upload-view/upload-view.component'
 
 const routes: Routes = [
   { path: 'sample', component: SampleViewComponent },
-  { path: 'test', component: TestViewComponent }
+  { path: 'test', component: TestViewComponent },
+  { path: 'upload', component: UploadViewComponent }
 ];
 
 @NgModule({

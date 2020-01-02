@@ -6,25 +6,16 @@ import { FileReaderObservable } from './file-reader-observable';
 // https://github.com/microsoft/TypeScript/issues/25510
 // eventtarget.resultが消えてしまっているためanyで対応する必要あり。
 
-export interface ReadFileObservableCallback {
-  onError?: ( evt: ProgressEvent ) => void,
-  onAbort?: ( evt: ProgressEvent ) => void,
-  onStart?: ( evt: ProgressEvent ) => void,
-  onProgress?: ( evt: ProgressEvent ) => void
-}
 
-export const readAsText = ( cb: ReadFileObservableCallback = {} ) => ( src: Observable<File> ) => {
+export const readAsText = () => ( src: Observable<File> ) => {
   return src.pipe(
     flatMap( file => {
       const obs = new FileReaderObservable();
-      const abort = obs.onAbort.pipe( tap( evt => { if( cb.onAbort ) cb.onAbort( evt ) } ) );
-      const error = obs.onError.pipe( tap( evt => { if( cb.onError ) cb.onError( evt ) } ) );
-      
-      const failed = merge( abort, error ).pipe( flatMap( evt => throwError( `Cannot read file. ${file.name}.` ) ) );
+      const failed = merge( obs.onAbort, obs.onError ).pipe( flatMap( evt => throwError( `Cannot read file. ${file.name}.` ) ) );
       const data = obs.onLoad.pipe( map( evt => ( evt as any ).target.result as string ) );
       
       obs.reader.readAsText( file );
-      return merge( data, abort );
+      return merge( data, failed );
     } )
   );
 }

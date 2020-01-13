@@ -10,7 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "node": "^13.6.0",
     "nodemon": "^2.0.2",
+    "rxjs": "^6.5.4",
+    "tslib": "^1.10.0",
     "typescript": "^3.7.4"
   },
   "devDependencies": {

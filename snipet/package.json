@@ -1,0 +1,19 @@
+{
+  "name": "snipet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:watch": "tsc -w -p tsconfig.json",
+    "start:dev": "nodemon --config nodemon.json"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^2.0.2",
+    "typescript": "^3.7.4"
+  },
+  "devDependencies": {
+    "@types/node": "^13.1.6"
+  }
+}

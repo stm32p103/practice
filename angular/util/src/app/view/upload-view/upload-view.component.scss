@@ -1,3 +1,11 @@
-span {
+td {
   white-space:pre;
+}
+
+.line-number{
+  user-select: none;
+}
+
+.code {
+  font-family: Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace;
 }

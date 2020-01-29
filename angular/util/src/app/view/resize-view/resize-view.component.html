@@ -1,0 +1,20 @@
+
+
+
+<p> Current Data: {{ data | json }}</p>
+<button (click)="changeBinding()">Change Binding</button>
+<div *ngFor="let d of data; index as i">
+<span>data[{{ i }}].{{ binding }}: </span>
+<cell [binding]="binding" [data]="d" ></cell>
+</div>
+<!--
+<p (click)="generate()">Click to create new counter.</p>
+<counter-container [binding]="binding" [data]="data"></counter-container>
+<ng-template #host ></ng-template>
+<p> Current Data: {{ data | json }}</p>
+<div *ngFor="let d of data; index as i">
+<span>data[{{ i }}].coord.x: </span>
+<input [(value)]="d.coord.x">
+</div>
+-->
+<!-- <div class="red" [ngStyle]="red" (click)="generate()"></div>-->

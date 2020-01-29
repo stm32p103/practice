@@ -1,9 +1,18 @@
-<p-fileUpload name="myfile[]" url="./upload.php" (onSelect)="select($event)"></p-fileUpload>
+<p-fileUpload name="myfile[]" url="./upload.php" (onSelect)="select($event)" multiple="true"></p-fileUpload>
 
 <div class="p-grid">
-<div class="p-col-10">
-<pre>
-<code [highlight]="src"></code>
-</pre>
+<p-button label="go" (click)="hello()"></p-button>
+<p-button label="Download" (click)="download()"></p-button>
+<div class="p-col-4" id="container">
+<table id="inner" >
+  <thead>
+  <tr><th>line</th><th>code</th>
+  </thead>
+  <tbody>
+  <tr *ngFor="let line of src; let i = index" id="src-{{i+1}}"><td class="code"><a routerLink="." fragment="dst-{{i+1}}">{{i+1}}</a></td><td class="code">{{line}}</td>
+  </tbody>
+</table>
 </div>
+<div class="p-col-4 fixed">
+<div></div>
 </div>

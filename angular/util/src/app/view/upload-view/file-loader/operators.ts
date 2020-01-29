@@ -2,11 +2,10 @@ import { Observable, fromEvent, throwError, merge, empty } from 'rxjs';
 import { map, tap, take, flatMap, observeOn, takeUntil, share } from 'rxjs/operators';
 import { FileReaderObservable } from './file-reader-observable';
 
-// Typescript 3.5.*での問題
-// https://github.com/microsoft/TypeScript/issues/25510
-// eventtarget.resultが消えてしまっているためanyで対応する必要あり。
 
 
+// ファイルの読み込みをするだけのOperator
+// 何らかの理由で中断したら例外を投げる
 export const readAsText = () => ( src: Observable<File> ) => {
   return src.pipe(
     flatMap( file => {
@@ -15,23 +14,11 @@ export const readAsText = () => ( src: Observable<File> ) => {
       const data = obs.onLoad.pipe( map( evt => ( evt as any ).target.result as string ) );
       
       obs.reader.readAsText( file );
-      return merge( data, failed );
+      return merge( data, failed ).pipe( takeUntil( obs.onLoadEnd ) );
     } )
   );
 }
 
-//const partialReadAsArrayBuffer = ( obs: FileReaderObservable, file: File, start: number, end: number ) => ( src: Observable<File> ) => {
-//  return src.pipe(
-//    flatMap( file => {
-//      const abort = merge( obs.onAbort, obs.onError ).pipe( flatMap( evt => throwError( `Cannot read file. ${file.name}.` ) ) );
-//      const data = obs.onLoad.pipe( map( evt => ( evt as any ).target.result as string ) );
-//      
-//      obs.reader.readAsArrayBuffer( file.slice( start, end ) );
-//      return merge( data, abort );
-//    } )
-//  );
-//}
-//
 //export const readAsArrayBuffer = ( maxSize: number ) => ( src: Observable<File> ) => {
 //  return src.pipe(
 //    flatMap( file => {

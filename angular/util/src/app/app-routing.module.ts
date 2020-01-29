@@ -4,15 +4,21 @@ import { Routes, RouterModule } from '@angular/router';
 import { SampleViewComponent } from './view/sample-view/sample-view.component'
 import { TestViewComponent } from './view/test-view/test-view.component'
 import { UploadViewComponent } from './view/upload-view/upload-view.component'
+import { ResizeViewComponent } from './view/resize-view/resize-view.component'
 
 const routes: Routes = [
   { path: 'sample', component: SampleViewComponent },
   { path: 'test', component: TestViewComponent },
-  { path: 'upload', component: UploadViewComponent }
+  { path: 'upload', component: UploadViewComponent },
+  { path: 'resize', component: ResizeViewComponent }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+    scrollPositionRestoration: 'enabled', // enabled で有効化
+    anchorScrolling: 'enabled', // enabled で有効化
+    scrollOffset: [0, 50]
+  } )],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

@@ -15,7 +15,8 @@ export class AppComponent implements OnInit {
       { label: 'Root', items: [
         { label: 'Sample', icon: 'pi pi-pw pi-file-excel', routerLink: 'sample' },
         { label: 'Test', icon: 'pi pi-pw pi-file-excel', routerLink: 'test' },
-        { label: 'Upload', icon: 'pi pi-pw pi-file-excel', routerLink: 'upload' }
+        { label: 'Upload', icon: 'pi pi-pw pi-file-excel', routerLink: 'upload' },
+        { label: 'Resize', icon: 'pi pi-pw pi-file-excel', routerLink: 'resize' }
       ] }
     ];
   }

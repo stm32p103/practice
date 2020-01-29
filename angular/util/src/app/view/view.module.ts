@@ -19,6 +19,7 @@ import { SplitButtonModule } from 'primeng/splitbutton';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { ThreeViewComponent } from './three-view/three-view.component';
 
 export function getHighlightLanguages() {
   return {
@@ -28,7 +29,7 @@ export function getHighlightLanguages() {
 }
 
 @NgModule({
-  declarations: [SampleViewComponent, TestViewComponent, Dex2HexPipe, HexByteComponent, HexViewComponent, UploadViewComponent, ResizeViewComponent,CounterComponent,CounterHostDirective, CounterContainerComponent, CellComponent],
+  declarations: [SampleViewComponent, TestViewComponent, Dex2HexPipe, HexByteComponent, HexViewComponent, UploadViewComponent, ResizeViewComponent,CounterComponent,CounterHostDirective, CounterContainerComponent, CellComponent, ThreeViewComponent],
   imports: [
     FormsModule,
     CommonModule,
@@ -51,7 +52,7 @@ export function getHighlightLanguages() {
 
     }
   ],
-  exports: [SampleViewComponent, TestViewComponent, UploadViewComponent, ResizeViewComponent,CounterHostDirective, CellComponent],
+  exports: [SampleViewComponent, TestViewComponent, UploadViewComponent, ResizeViewComponent,CounterHostDirective, CellComponent, ThreeViewComponent],
   entryComponents: [CounterComponent ]
 })
 export class ViewModule { }

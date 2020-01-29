@@ -1,7 +1,7 @@
 // ファイルをダウンロードする
 import * as fs from 'fs';
 import { fromEvent, from } from 'rxjs';
-import { throwError, merge, Observable, iif, of } from 'rxjs';
+import { throwError, merge, Observable, iif, of, concat } from 'rxjs';
 import { takeUntil, tap, last, flatMap, catchError } from 'rxjs/operators';
 import { get, Response, CoreOptions } from 'request';
 
@@ -25,12 +25,12 @@ const options = {
   }
 }
 
-// 全てのDL対象に対して、フォルダを作成しファイルをDLする。
-from( downloads ).pipe(
-  flatMap( dl => createDirObservable( dirname( dl.dst ) ).pipe(
-    flatMap( () => downloadFileObservable( dl.dst, encodeURI( dl.url ), options ) ),
-    catchError( err => of( err ) )
-  ) )
-).subscribe();
+concat( 
+  // 全てのDL対象に対してフォルダを作成する
+  from( downloads ).pipe( flatMap( dl => createDirObservable( dirname( dl.dst ) ) ) ), 
+  // ダウンロードする
+  from( downloads ).pipe( flatMap( dl => downloadFileObservable( dl.dst, encodeURI( dl.url ), options ) ) )
+).pipe( catchError( err => of( err ) ) ).subscribe();
+
 
 

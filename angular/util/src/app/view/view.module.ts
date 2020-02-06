@@ -20,6 +20,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { ThreeViewComponent } from './three-view/three-view.component';
+import { DataViewComponent } from './data-view/data-view.component';
 
 export function getHighlightLanguages() {
   return {
@@ -29,7 +30,7 @@ export function getHighlightLanguages() {
 }
 
 @NgModule({
-  declarations: [SampleViewComponent, TestViewComponent, Dex2HexPipe, HexByteComponent, HexViewComponent, UploadViewComponent, ResizeViewComponent,CounterComponent,CounterHostDirective, CounterContainerComponent, CellComponent, ThreeViewComponent],
+  declarations: [SampleViewComponent, TestViewComponent, Dex2HexPipe, HexByteComponent, HexViewComponent, UploadViewComponent, ResizeViewComponent,CounterComponent,CounterHostDirective, CounterContainerComponent, CellComponent, ThreeViewComponent, DataViewComponent],
   imports: [
     FormsModule,
     CommonModule,

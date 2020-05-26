@@ -11,19 +11,16 @@ export class AppComponent implements OnInit {
   @ViewChild('image') canvas;
   constructor(private paste: PasteService) {
     this.paste.getData('text/html').subscribe(data=>console.log(data));
+    this.paste.getData('text/plain').subscribe(data=>console.log(data));
   }
   pasted = '';
 
   onPaste(event: ClipboardEvent) {
-    let data = event.clipboardData.getData('text/json');
-    event.preventDefault();
-    this.pasted = data;
   }
 
   ngOnInit() {
-    console.log(this.canvas)
-    this.paste.getImage().subscribe(data=>{
+   this.paste.getImages().subscribe(data=>{
       this.canvas.nativeElement.getContext('2d').drawImage(data,0,0);
-    });
+  });
   }
 }

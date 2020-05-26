@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { PasteService } from './service';
+import { PasteService, ResizeService } from './service';
 
 @NgModule({
   declarations: [
@@ -11,7 +11,7 @@ import { PasteService } from './service';
   imports: [
     BrowserModule
   ],
-  providers: [PasteService],
+  providers: [PasteService, ResizeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

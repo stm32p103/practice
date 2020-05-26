@@ -5,27 +5,27 @@ import { flatMap, map, filter } from 'rxjs/operators';
 
 @Injectable()
 export class PasteService {
-  private messageSubject = new Subject<ClipboardEvent>();
+  private eventSubject = new Subject<ClipboardEvent>();
 
   constructor(private eventManager: EventManager) {
     // Windowに対するペーストイベントをSubjectにする
-    this.eventManager.addGlobalEventListener('window', 'paste', async (event:ClipboardEvent) => this.messageSubject.next(event) );
+    this.eventManager.addGlobalEventListener('window', 'paste', async (event:ClipboardEvent) => this.eventSubject.next(event) );
   }
 
-  private get event(): Observable<ClipboardEvent> {
-    return this.messageSubject;
+  get event(): Observable<ClipboardEvent> {
+    return this.eventSubject;
   }
 
   // MIMEタイプを指定してデータを取得する
   getData(mimeType: string): Observable<string> {
-    return this.messageSubject.pipe( 
+    return this.eventSubject.pipe( 
       map( e => e.clipboardData.getData(mimeType) ),
       filter( data => data.length > 0 )
     );
   }
 
-  private getFiles() {
-    return this.messageSubject.pipe( flatMap( e => {
+  private getFile() {
+    return this.eventSubject.pipe( flatMap( e => {
       const files = e.clipboardData.files;
       const array: File[] = [];
 
@@ -38,10 +38,10 @@ export class PasteService {
     } ) );
   }
 
-  getImages() {
+  getImage() {
     // MIME TypeがImageから始まっていたら画像として扱う
     // https://developer.mozilla.org/ja/docs/Web/HTTP/Basics_of_HTTP/MIME_types
-    return this.getFiles().pipe( 
+    return this.getFile().pipe( 
       filter( file => file.type.match('^image/').length > 0 ),
       flatMap( file => from( createImageBitmap(file) ) )
     );

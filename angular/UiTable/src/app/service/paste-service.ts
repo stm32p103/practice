@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { EventManager } from '@angular/platform-browser';
 import { Observable, Subject, from } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
-import { stringify } from 'querystring';
+import { flatMap, map, filter } from 'rxjs/operators';
 
 @Injectable()
 export class PasteService {
@@ -19,12 +18,10 @@ export class PasteService {
 
   // MIMEタイプを指定してデータを取得する
   getData(mimeType: string): Observable<string> {
-    return this.messageSubject.pipe( map( e => {
-      const data = e.clipboardData.getData(mimeType);
-      if( data.length !== 0 ) {
-        return data;
-      }
-    } ) );
+    return this.messageSubject.pipe( 
+      map( e => e.clipboardData.getData(mimeType) ),
+      filter( data => data.length > 0 )
+    );
   }
 
   private getFiles() {
@@ -44,10 +41,9 @@ export class PasteService {
   getImages() {
     // MIME TypeがImageから始まっていたら画像として扱う
     // https://developer.mozilla.org/ja/docs/Web/HTTP/Basics_of_HTTP/MIME_types
-    return this.getFiles().pipe( flatMap( file => {
-      if( file.type.match('^image/') ) {
-        return from( createImageBitmap(file) );
-      }
-    } ) );
+    return this.getFiles().pipe( 
+      filter( file => file.type.match('^image/').length > 0 ),
+      flatMap( file => from( createImageBitmap(file) ) )
+    );
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { EventManager } from '@angular/platform-browser';
-import { Observable, Subject, from } from 'rxjs';
-import { flatMap, map, filter } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 // Resize Observer がドラフトのため自作
 // https://stackoverflow.com/questions/1664785/resize-html5-canvas-to-fit-window

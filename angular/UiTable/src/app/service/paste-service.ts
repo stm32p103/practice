@@ -9,7 +9,7 @@ export class PasteService {
 
   constructor(private eventManager: EventManager) {
     // Windowに対するペーストイベントをSubjectにする
-    this.eventManager.addGlobalEventListener('window', 'paste', async (event:ClipboardEvent) => this.eventSubject.next(event) );
+    this.eventManager.addGlobalEventListener('window', 'paste', async ( event: ClipboardEvent ) => this.eventSubject.next( event ) );
   }
 
   get event(): Observable<ClipboardEvent> {
@@ -17,9 +17,9 @@ export class PasteService {
   }
 
   // MIMEタイプを指定してデータを取得する
-  getData(mimeType: string): Observable<string> {
+  getData( mimeType: string ): Observable<string> {
     return this.eventSubject.pipe( 
-      map( e => e.clipboardData.getData(mimeType) ),
+      map( e => e.clipboardData.getData( mimeType ) ),
       filter( data => data.length > 0 )
     );
   }
@@ -31,7 +31,7 @@ export class PasteService {
 
       // 一旦配列にする
       for( let i = 0; i < files.length; i++ ) {array
-        array.push( (files[i]) );
+        array.push( ( files[ i ] ) );
       }
 
       return from( array );
@@ -42,8 +42,8 @@ export class PasteService {
     // MIME TypeがImageから始まっていたら画像として扱う
     // https://developer.mozilla.org/ja/docs/Web/HTTP/Basics_of_HTTP/MIME_types
     return this.getFile().pipe( 
-      filter( file => file.type.match('^image/').length > 0 ),
-      flatMap( file => from( createImageBitmap(file) ) )
+      filter( file => file.type.match( '^image/' ).length > 0 ),
+      flatMap( file => from( createImageBitmap( file ) ) )
     );
   }
 }

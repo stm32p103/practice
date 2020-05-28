@@ -1,7 +1,7 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { PasteService, ResizeService } from './service';
 import { map } from 'rxjs/operators';
-import { createScreen, Picture, CellDrawable } from './module';
+import { createScreen, Picture, CellDrawable, Html2ArrayConverter } from './module';
 
 @Component({
   selector: 'app-root',
@@ -9,11 +9,13 @@ import { createScreen, Picture, CellDrawable } from './module';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements AfterViewInit {
+  converter = new Html2ArrayConverter( new DOMParser() );
   @ViewChild('image') canvas;
   constructor(private paste: PasteService, private resize: ResizeService) {
-    this.paste.getData('text/html').subscribe(data=>console.log(data));
-    this.paste.getData('text/plain').subscribe(data=>console.log(data));
-
+    this.paste.getData('text/html').subscribe(data=>{
+      const res = this.converter.convert( data );
+      console.log(res);
+    } );
   }
   pasted = '';
 

@@ -25,15 +25,17 @@ export class PasteService {
   }
 
   private getFile() {
+    // この辺の仕様はブラウザ・バージョンによって変わるので、将来使えなくなるかもしれない
     return this.eventSubject.pipe( flatMap( e => {
       const files = e.clipboardData.files;
-      const array: File[] = [];
+      const array: File[] = new Array<File>( files.length );
 
       // 一旦配列にする
-      for( let i = 0; i < files.length; i++ ) {array
-        array.push( ( files[ i ] ) );
+      for( let i = 0; i < files.length; i++ ) {
+        array[ i ] = files.item[ i ];
       }
 
+      // Observableにする
       return from( array );
     } ) );
   }

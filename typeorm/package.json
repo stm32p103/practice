@@ -1,0 +1,21 @@
+{
+  "name": "typeorm-practice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:watch": "tsc -w -p tsconfig.json",
+    "start:dev": "nodemon --config nodemon.json"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^14.6.0",
+    "sqlite3": "^5.0.0",
+    "ts-loader": "^8.0.2",
+    "tslib": "^1.13.0",
+    "typeorm": "^0.2.25",
+    "typescript": "^3.7.4"
+  },
+  "devDependencies": {}
+}

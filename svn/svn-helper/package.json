@@ -1,0 +1,21 @@
+{
+  "name": "node-dev",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:watch": "tsc -w -p tsconfig.json",
+    "start:dev": "nodemon --config nodemon.json"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@types/uuid": "^8.3.0",
+    "shallow-equal": "^1.2.1",
+    "tslib": "^1.10.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^13.1.6"
+  }
+}

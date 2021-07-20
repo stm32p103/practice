@@ -1,11 +1,13 @@
 import { Component, Injectable, OnInit, OnDestroy } from '@angular/core';
 import { MatSliderChange } from '@angular/material/slider';
-import { Subject, interval, Subscription } from 'rxjs';
-import { debounce, tap } from 'rxjs/operators'; 
-import {  ViewChild, ElementRef } from '@angular/core';
+import { JpgLoader, QrReader } from './loader';
 
-import jsQR from 'jsqr';
-import { decode } from 'jpeg-js';
+
+interface RowData {
+  filename: string;
+  code: string | null;
+  url: string | null;
+}
 
 @Component({
   selector: 'app-root',
@@ -13,23 +15,37 @@ import { decode } from 'jpeg-js';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent  {
-  title = 'localstorage';
-  meterValue: number = 0;
-  meterSubject: Subject<number> = new Subject();
+  // title = 'localstorage';
+  // meterValue: number = 0;
+  // meterSubject: Subject<number> = new Subject();
+  private readonly loader: JpgLoader = new JpgLoader();
+  private readonly reader: QrReader = new QrReader();
+  rows: RowData[] = [];
+  displayedColumns: string[] = ['filename', 'code', 'image'];
 
   async onFileSelected( event: Event ) {
-    const file = ( <HTMLInputElement>event.target )?.files;
+    const files = ( <HTMLInputElement>event.target )?.files;
     
-    if ( file ) {
-      this.fileName = file[0].name;
-      const buf = await file[0].arrayBuffer();
-      const img = decode( buf );
-
-      console.log( img.height );
-      console.log( img.width );
+    if ( !files ) {
+      return;
     }
+
+    const rows: RowData[] = [];
+    for( let i = 0; i < files.length; i++ ) {
+      const filename = files[i].name;
+      const img = await this.loader.load( await files[i].arrayBuffer() );
+      const code = await this.reader.read( img );
+      const url = URL.createObjectURL( files[i] );  // revokeObjectURLで消すこと
+
+      const row: RowData = {
+        filename: filename,
+        code: code,
+        url: url
+      }
+
+      rows.push( row );
+    }
+
+    this.rows = rows;
   }
-
-  fileName = '';
 }
-

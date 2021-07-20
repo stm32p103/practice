@@ -1,5 +1,27 @@
 <!-- <mat-slider min="1" max="100" step="1" [value]="meterValue" (input)="update($event)"></mat-slider> -->
 
 
-<input type="file" hidden (change)="onFileSelected($event)" #fileUpload>
-<button mat-raised-button color="primary" (click)="fileUpload.click()">{{fileName || "No file uploaded yet."}}</button>
+<input type="file" hidden (change)="onFileSelected($event)" #fileUpload accept="image/jpg" multiple>
+<button mat-raised-button color="primary" (click)="fileUpload.click()">Load jpg</button>
+
+<table mat-table [dataSource]="rows" class="mat-elevation-z8">
+  <ng-container matColumnDef="filename">
+    <th mat-header-cell *matHeaderCellDef class="table-cell"> FileName </th>
+    <td mat-cell *matCellDef="let element" class="table-cell"> {{element.filename}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="code">
+    <th mat-header-cell *matHeaderCellDef class="table-cell"> Code </th>
+    <td mat-cell *matCellDef="let element" class="table-cell"> {{element.code}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="image">
+    <th mat-header-cell *matHeaderCellDef class="table-cell"> Image </th>
+    <td mat-cell *matCellDef="let element" class="table-cell"> <img [src]="element.url | safeResourceUrl" width="100px"></td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+

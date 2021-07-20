@@ -8,20 +8,24 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import {MatTableModule} from '@angular/material/table'; 
 const materialModules = [
   MatIconModule,
   MatButtonModule,
   MatInputModule,
   MatFormFieldModule,
   MatProgressBarModule,
-  MatToolbarModule
+  MatToolbarModule,
+  MatTableModule
 ];
 
 import { AppComponent } from './app.component';
+import { SafeUrlPipe } from './pipe/safe-url-pipe';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SafeUrlPipe
   ],
   imports: [
     BrowserModule,

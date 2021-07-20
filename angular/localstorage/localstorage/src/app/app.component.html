@@ -1,0 +1,5 @@
+<!-- <mat-slider min="1" max="100" step="1" [value]="meterValue" (input)="update($event)"></mat-slider> -->
+
+
+<input type="file" hidden (change)="onFileSelected($event)" #fileUpload>
+<button mat-raised-button color="primary" (click)="fileUpload.click()">{{fileName || "No file uploaded yet."}}</button>

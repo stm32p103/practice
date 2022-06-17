@@ -22,7 +22,7 @@
     "@angular/router": "~12.1.1",
     "@types/pako": "^1.0.2",
     "@types/qrcode": "^1.4.1",
-    "jpeg-js": "^0.4.3",
+    "jpeg-js": "^0.4.4",
     "jsqr": "^1.4.0",
     "pako": "^2.0.3",
     "png-js": "^1.0.0",
